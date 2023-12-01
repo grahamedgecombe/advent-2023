@@ -1,0 +1,30 @@
+plugins {
+    id 'application'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.21'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation('org.jetbrains.kotlin:kotlin-test-junit5:1.9.21')
+}
+
+application {
+    mainClass = 'com.grahamedgecombe.advent2023.AdventKt'
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+}
+
+wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+}
