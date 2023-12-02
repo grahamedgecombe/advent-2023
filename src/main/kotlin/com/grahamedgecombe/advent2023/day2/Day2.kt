@@ -14,4 +14,14 @@ object Day2 : Puzzle<List<Game>>(2) {
             }
         }.sumOf(Game::id)
     }
+
+    override fun solvePart2(input: List<Game>): Int {
+        return input.sumOf { game ->
+            val red = game.sets.maxOf(CubeSet::red)
+            val green = game.sets.maxOf(CubeSet::green)
+            val blue = game.sets.maxOf(CubeSet::blue)
+
+            red * green * blue
+        }
+    }
 }
