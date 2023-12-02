@@ -1,12 +1,14 @@
 package com.grahamedgecombe.advent2023
 
 import com.grahamedgecombe.advent2023.day1.Day1
+import com.grahamedgecombe.advent2023.day2.Day2
 import kotlin.time.Duration
 import kotlin.time.measureTimedValue
 
 fun main(args: Array<String>) {
     val puzzles = mutableListOf<Puzzle<*>>(
         Day1,
+        Day2,
     )
 
     val day = args.firstOrNull()?.toIntOrNull()
