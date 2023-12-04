@@ -10,6 +10,12 @@ class Day4Test {
         assertEquals(22193, Day4.solvePart1(PROD_INPUT))
     }
 
+    @Test
+    fun testPart2() {
+        assertEquals(30, Day4.solvePart2(TEST_INPUT_1))
+        assertEquals(5625994, Day4.solvePart2(PROD_INPUT))
+    }
+
     private companion object {
         private val TEST_INPUT_1 = Day4.parse("""
             Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
