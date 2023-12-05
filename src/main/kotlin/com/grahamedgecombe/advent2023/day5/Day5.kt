@@ -10,4 +10,8 @@ object Day5 : Puzzle<Almanac>(5) {
     override fun solvePart1(input: Almanac): Long {
         return input.seeds.minOf { seed -> input.transform(seed) }
     }
+
+    override fun solvePart2(input: Almanac): Long {
+        return input.transform(input.seedRanges).minOf(LongRange::start)
+    }
 }

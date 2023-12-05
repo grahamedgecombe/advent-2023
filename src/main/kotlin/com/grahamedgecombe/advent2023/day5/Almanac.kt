@@ -3,6 +3,8 @@ package com.grahamedgecombe.advent2023.day5
 import com.grahamedgecombe.advent2023.UnsolvableException
 
 data class Almanac(val seeds: List<Long>, val maps: Map<String, AlmanacMap>) {
+    val seedRanges = seeds.chunked(2) { (start, length) -> start until (start + length) }
+
     fun transform(seed: Long): Long {
         var type = "seed"
         var number = seed
@@ -14,6 +16,19 @@ data class Almanac(val seeds: List<Long>, val maps: Map<String, AlmanacMap>) {
         }
 
         return number
+    }
+
+    fun transform(seeds: List<LongRange>): List<LongRange> {
+        var type = "seed"
+        var numbers = seeds
+
+        while (type != "location") {
+            val map = maps[type] ?: throw UnsolvableException()
+            type = map.destination
+            numbers = map.transform(numbers)
+        }
+
+        return numbers
     }
 
     companion object {
@@ -50,7 +65,7 @@ data class Almanac(val seeds: List<Long>, val maps: Map<String, AlmanacMap>) {
                     ranges += RangeMap.parse(s)
                 }
 
-                maps[source] = AlmanacMap(dest, ranges)
+                maps[source] = AlmanacMap(dest, ranges.sortedBy(RangeMap::sourceStart))
             }
 
             return Almanac(seeds, maps)

@@ -2,6 +2,7 @@ package com.grahamedgecombe.advent2023.day5
 
 data class RangeMap(val destStart: Long, val sourceStart: Long, val length: Long) {
     val sourceEnd = sourceStart + length - 1
+    val destEnd = destStart + length - 1
 
     fun transform(n: Long): Long {
         return n - sourceStart + destStart
