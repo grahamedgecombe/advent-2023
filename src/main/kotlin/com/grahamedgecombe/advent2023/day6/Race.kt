@@ -1,6 +1,6 @@
 package com.grahamedgecombe.advent2023.day6
 
-data class Race(val duration: Int, val record: Int) {
+data class Race(val duration: Long, val record: Long) {
     fun countWins(): Int {
         var count = 0
 
