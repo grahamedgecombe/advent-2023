@@ -1,28 +1,11 @@
 package com.grahamedgecombe.advent2023.day7
 
-data class Hand(val cards: List<Card>, val bid: Int) : Comparable<Hand> {
-    val type = getType(cards)
+data class Hand(val cards: List<Card>, val bid: Int) {
+    val type = getType(cards, wildcard = false)
+    val wildcardType = getType(cards, wildcard = true)
 
     init {
         require(cards.size == 5)
-    }
-
-    override fun compareTo(other: Hand): Int {
-        var cmp = type.compareTo(other.type)
-        if (cmp != 0) {
-            return cmp
-        }
-
-        for ((i, card) in cards.withIndex()) {
-            val otherCard = other.cards[i]
-
-            cmp = card.compareTo(otherCard)
-            if (cmp != 0) {
-                return cmp
-            }
-        }
-
-        return 0
     }
 
     companion object {
@@ -31,13 +14,46 @@ data class Hand(val cards: List<Card>, val bid: Int) : Comparable<Hand> {
             return Hand(cards.map(Card::parse), bid.toInt())
         }
 
-        private fun getType(cards: List<Card>): HandType {
+        private fun getType(cards: List<Card>, wildcard: Boolean):  HandType {
             val bag = mutableMapOf<Card, Int>()
             for (card in cards) {
                 bag[card] = bag.getOrDefault(card, 0) + 1
             }
 
-            val counts = bag.values.toList()
+            val jokers = if (wildcard) {
+                bag.remove(Card.JACK) ?: 0
+            } else {
+                0
+            }
+
+            return getBestType(bag.values.toList(), jokers)
+        }
+
+        private fun getBestType(counts: List<Int>, jokers: Int): HandType {
+            if (jokers == 0) {
+                return getType(counts)
+            }
+
+            // try joker as new card type
+            var best = getBestType(counts.plus(1), jokers - 1)
+
+            // try joker as every existing card type
+            for (i in counts.indices) {
+                val copy = counts.toMutableList()
+                copy[i]++
+
+                val type = getBestType(copy, jokers - 1)
+                if (type < best) {
+                    best = type
+                }
+            }
+
+            return best
+        }
+
+        private fun getType(counts: List<Int>): HandType {
+            require(counts.sum() == 5)
+            require(counts.size in 1..5)
 
             return when (counts.size) {
                 1 -> HandType.FIVE_OF_A_KIND
