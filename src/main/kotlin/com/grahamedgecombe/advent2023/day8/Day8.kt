@@ -1,7 +1,7 @@
 package com.grahamedgecombe.advent2023.day8
 
 import com.grahamedgecombe.advent2023.Puzzle
-import com.grahamedgecombe.advent2023.UnsolvableException
+import kotlin.math.abs
 
 object Day8 : Puzzle<Input>(8) {
     override fun parse(input: Sequence<String>): Input {
@@ -9,20 +9,24 @@ object Day8 : Puzzle<Input>(8) {
     }
 
     override fun solvePart1(input: Input): Int {
-        var node = "AAA"
-        var count = 0
+        return input.solve("AAA") { it == "ZZZ" }
+    }
 
-        while (node != "ZZZ") {
-            val direction = input.directions[count % input.directions.size]
-            val (left, right) = input.nodes[node] ?: throw UnsolvableException()
+    override fun solvePart2(input: Input): Long {
+        return input.nodes.keys.filter { it.endsWith("A") }
+            .map { start -> input.solve(start) { it.endsWith("Z") }.toLong() }
+            .reduce(::lcm)
+    }
 
-            node = when (direction) {
-                Direction.LEFT -> left
-                Direction.RIGHT -> right
-            }
-            count++
+    private fun lcm(a: Long, b: Long): Long {
+        return abs(a * b) / gcd(a, b)
+    }
+
+    private tailrec fun gcd(a: Long, b: Long): Long {
+        if (b == 0L) {
+            return a
         }
 
-        return count
+        return gcd(b, a % b)
     }
 }
