@@ -10,6 +10,12 @@ class Day9Test {
         assertEquals(1789635132, Day9.solvePart1(PROD_INPUT))
     }
 
+    @Test
+    fun testPart2() {
+        assertEquals(2, Day9.solvePart2(TEST_INPUT_1))
+        assertEquals(913, Day9.solvePart2(PROD_INPUT))
+    }
+
     private companion object {
         private val TEST_INPUT_1 = Day9.parse("""
             0 3 6 9 12 15

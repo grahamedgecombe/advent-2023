@@ -15,6 +15,10 @@ object Day9 : Puzzle<List<List<Int>>>(9) {
         return input.sumOf(::getNext)
     }
 
+    override fun solvePart2(input: List<List<Int>>): Int {
+        return input.sumOf(::getPrevious)
+    }
+
     private fun getNext(history: List<Int>): Int {
         var seq = history
         var next = seq.last()
@@ -25,5 +29,14 @@ object Day9 : Puzzle<List<List<Int>>>(9) {
         }
 
         return next
+    }
+
+    private fun getPrevious(history: List<Int>): Int {
+        if (history.all { it == 0 }) {
+            return 0
+        }
+
+        val diffs = history.zipWithNext { a, b -> b - a }.toList()
+        return history.first() - getPrevious(diffs)
     }
 }
