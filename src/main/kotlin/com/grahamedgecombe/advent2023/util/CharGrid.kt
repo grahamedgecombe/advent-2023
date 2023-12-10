@@ -14,6 +14,10 @@ class CharGrid private constructor(
         return rows[y]
     }
 
+    operator fun get(v: Vector2): Char {
+        return get(v.x, v.y)
+    }
+
     operator fun get(x: Int, y: Int): Char {
         if (y !in 0 until height) {
             return default
@@ -25,6 +29,17 @@ class CharGrid private constructor(
         }
 
         return row[x]
+    }
+
+    fun find(tile: Char): Vector2? {
+        for ((y, row) in rows.withIndex()) {
+            val x = row.indexOf(tile)
+            if (x != -1) {
+                return Vector2(x, y)
+            }
+        }
+
+        return null
     }
 
     companion object {
