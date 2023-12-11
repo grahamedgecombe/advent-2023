@@ -18,15 +18,23 @@ object Day11 : Puzzle<Set<Vector2>>(11) {
         return galaxies
     }
 
-    override fun solvePart1(input: Set<Vector2>): Int {
-        return sumDistances(expand(input).toList())
+    override fun solvePart1(input: Set<Vector2>): Long {
+        return solve(input, 2)
     }
 
-    private fun expand(galaxies: Set<Vector2>): Set<Vector2> {
-        return expandX(expandY(galaxies))
+    override fun solvePart2(input: Set<Vector2>): Long {
+        return solve(input, 1000000)
     }
 
-    private fun expandX(galaxies: Set<Vector2>): Set<Vector2> {
+    fun solve(input: Set<Vector2>, factor: Int): Long {
+        return sumDistances(expand(input, factor).toList())
+    }
+
+    private fun expand(galaxies: Set<Vector2>, factor: Int): Set<Vector2> {
+        return expandX(expandY(galaxies, factor), factor)
+    }
+
+    private fun expandX(galaxies: Set<Vector2>, factor: Int): Set<Vector2> {
         val expanded = mutableSetOf<Vector2>()
 
         val sorted = galaxies.sortedBy(Vector2::x)
@@ -39,7 +47,7 @@ object Day11 : Puzzle<Set<Vector2>>(11) {
         for ((a, b) in sorted.zipWithNext()) {
             val diff = b.x - a.x - 1
             if (diff > 0) {
-                extraSpace += diff
+                extraSpace += diff * (factor - 1)
             }
 
             expanded += Vector2(b.x + extraSpace, b.y)
@@ -48,7 +56,7 @@ object Day11 : Puzzle<Set<Vector2>>(11) {
         return expanded
     }
 
-    private fun expandY(galaxies: Set<Vector2>): Set<Vector2> {
+    private fun expandY(galaxies: Set<Vector2>, factor: Int): Set<Vector2> {
         val expanded = mutableSetOf<Vector2>()
 
         val sorted = galaxies.sortedBy(Vector2::y)
@@ -61,7 +69,7 @@ object Day11 : Puzzle<Set<Vector2>>(11) {
         for ((a, b) in sorted.zipWithNext()) {
             val diff = b.y - a.y - 1
             if (diff > 0) {
-                extraSpace += diff
+                extraSpace += diff * (factor - 1)
             }
 
             expanded += Vector2(b.x, b.y + extraSpace)
@@ -70,12 +78,12 @@ object Day11 : Puzzle<Set<Vector2>>(11) {
         return expanded
     }
 
-    private fun sumDistances(galaxies: List<Vector2>): Int {
-        var sum = 0
+    private fun sumDistances(galaxies: List<Vector2>): Long {
+        var sum = 0L
 
         for ((i, a) in galaxies.withIndex()) {
             for (b in galaxies.subList(0, i)) {
-                sum += (a - b).manhattanDistance
+                sum += (a - b).manhattanDistance.toLong()
             }
         }
 
