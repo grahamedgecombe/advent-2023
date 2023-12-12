@@ -7,7 +7,11 @@ object Day12 : Puzzle<List<Row>>(12) {
         return input.map(Row::parse).toList()
     }
 
-    override fun solvePart1(input: List<Row>): Int {
+    override fun solvePart1(input: List<Row>): Long {
         return input.sumOf(Row::countArrangements)
+    }
+
+    override fun solvePart2(input: List<Row>): Long {
+        return input.map(Row::unfold).sumOf(Row::countArrangements)
     }
 }

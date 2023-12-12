@@ -1,18 +1,40 @@
 package com.grahamedgecombe.advent2023.day12
 
 class Row(private val springs: List<Spring>, private val damaged: List<Int>) {
-    fun countArrangements(): Int {
+    private val cache = mutableMapOf<State, Long>()
+
+    fun countArrangements(): Long {
         return countArrangements(springs, damaged, false)
     }
 
-    private fun countArrangements(springs: List<Spring>, damaged: List<Int>, prevDamaged: Boolean): Int {
+    fun unfold(): Row {
+        val unfoldedSprings = mutableListOf<Spring>()
+        val unfoldedDamaged = mutableListOf<Int>()
+
+        for (i in 0 until 5) {
+            unfoldedSprings += springs
+            if (i != 4) {
+                unfoldedSprings += Spring.UNKNOWN
+            }
+
+            unfoldedDamaged += damaged
+        }
+
+        return Row(unfoldedSprings, unfoldedDamaged)
+    }
+
+    private fun countArrangements(
+        springs: List<Spring>,
+        damaged: List<Int>,
+        prevDamaged: Boolean,
+    ): Long = cache.getOrPut(State(springs, damaged, prevDamaged)) {
         // base case
         val spring = springs.firstOrNull()
         if (spring == null) {
-            return if (damaged.isEmpty()) 1 else 0
+            return@getOrPut if (damaged.isEmpty()) 1 else 0
         }
 
-        var count = 0
+        var count = 0L
 
         // recursive case 1: operational
         if (spring != Spring.DAMAGED) {
@@ -27,7 +49,7 @@ class Row(private val springs: List<Spring>, private val damaged: List<Int>) {
             }
         }
 
-        return count
+        return@getOrPut count
     }
 
     companion object {
