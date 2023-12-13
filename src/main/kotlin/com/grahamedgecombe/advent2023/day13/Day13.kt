@@ -30,16 +30,24 @@ object Day13 : Puzzle<List<CharGrid>>(13) {
     }
 
     override fun solvePart1(input: List<CharGrid>): Int {
+        return solve(input, 0)
+    }
+
+    override fun solvePart2(input: List<CharGrid>): Int {
+        return solve(input, 1)
+    }
+
+    private fun solve(input: List<CharGrid>, errors: Int): Int {
         return input.sumOf { mirror ->
-            val cols = reflectVertical(mirror)
-            val rows = reflectHorizontal(mirror)
+            val cols = reflectVertical(mirror, errors)
+            val rows = reflectHorizontal(mirror, errors)
             (rows * 100) + cols
         }
     }
 
-    private fun reflectVertical(mirror: CharGrid): Int {
+    private fun reflectVertical(mirror: CharGrid, errors: Int): Int {
         for (x in 1 until mirror.width) {
-            if (reflectVertical(mirror, x)) {
+            if (reflectVertical(mirror, x, errors)) {
                 return x
             }
         }
@@ -47,7 +55,9 @@ object Day13 : Puzzle<List<CharGrid>>(13) {
         return 0
     }
 
-    private fun reflectVertical(mirror: CharGrid, x: Int): Boolean {
+    private fun reflectVertical(mirror: CharGrid, x: Int, expectedErrors: Int): Boolean {
+        var errors = 0
+
         for (dx in 0 until x) {
             val x0 = x - dx - 1
             val x1 = x + dx
@@ -58,17 +68,17 @@ object Day13 : Puzzle<List<CharGrid>>(13) {
 
             for (y in 0 until mirror.height) {
                 if (mirror[x0, y] != mirror[x1, y]) {
-                    return false
+                    errors++
                 }
             }
         }
 
-        return true
+        return errors == expectedErrors
     }
 
-    private fun reflectHorizontal(mirror: CharGrid): Int {
+    private fun reflectHorizontal(mirror: CharGrid, errors: Int): Int {
         for (y in 1 until mirror.height) {
-            if (reflectHorizontal(mirror, y)) {
+            if (reflectHorizontal(mirror, y, errors)) {
                 return y
             }
         }
@@ -76,7 +86,9 @@ object Day13 : Puzzle<List<CharGrid>>(13) {
         return 0
     }
 
-    private fun reflectHorizontal(mirror: CharGrid, y: Int): Boolean {
+    private fun reflectHorizontal(mirror: CharGrid, y: Int, expectedErrors: Int): Boolean {
+        var errors = 0
+
         for (dy in 0 until y) {
             val y0 = y - dy - 1
             val y1 = y + dy
@@ -87,11 +99,11 @@ object Day13 : Puzzle<List<CharGrid>>(13) {
 
             for (x in 0 until mirror.width) {
                 if (mirror[x, y0] != mirror[x, y1]) {
-                    return false
+                    errors++
                 }
             }
         }
 
-        return true
+        return errors == expectedErrors
     }
 }
