@@ -56,6 +56,28 @@ class CharGrid private constructor(
         return null
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as CharGrid
+
+        if (width != other.width) return false
+        if (height != other.height) return false
+        if (!tiles.contentEquals(other.tiles)) return false
+        if (default != other.default) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = width
+        result = 31 * result + height
+        result = 31 * result + tiles.contentHashCode()
+        result = 31 * result + default.hashCode()
+        return result
+    }
+
     companion object {
         fun parse(input: List<String>, default: Char): CharGrid {
             val height = input.size
