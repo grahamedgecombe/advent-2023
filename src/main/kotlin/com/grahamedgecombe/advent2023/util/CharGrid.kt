@@ -10,6 +10,8 @@ class CharGrid private constructor(
         tiles.fill(default)
     }
 
+    constructor(other: CharGrid) : this(other.width, other.height, other.tiles.copyOf(), other.default)
+
     fun getRow(y: Int): String {
         if (y !in 0 until height) {
             throw IndexOutOfBoundsException()
