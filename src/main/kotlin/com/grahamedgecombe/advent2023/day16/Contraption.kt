@@ -5,12 +5,32 @@ import com.grahamedgecombe.advent2023.util.Vector2
 
 class Contraption private constructor(private val grid: CharGrid) {
     fun countEnergised(): Int {
+        return countEnergised(Vector2(-1, 0), Direction.RIGHT)
+    }
+
+    private fun countEnergised(position: Vector2, direction: Direction): Int {
         val seen = mutableSetOf<Pair<Vector2, Direction>>()
-        explore(Vector2(-1, 0), Direction.RIGHT, seen)
+        explore(position, direction, seen)
         return seen.asSequence()
             .map(Pair<Vector2, Direction>::first)
             .distinct()
             .count()
+    }
+
+    fun countMaxEnergised(): Int {
+        var max = 0
+
+        for (x in 0 until grid.width) {
+            max = maxOf(max, countEnergised(Vector2(x, -1), Direction.DOWN))
+            max = maxOf(max, countEnergised(Vector2(x, grid.height), Direction.UP))
+        }
+
+        for (y in 0 until grid.height) {
+            max = maxOf(max, countEnergised(Vector2(-1, y), Direction.RIGHT))
+            max = maxOf(max, countEnergised(Vector2(grid.width, y), Direction.LEFT))
+        }
+
+        return max
     }
 
     private fun explore(origin: Vector2, direction: Direction, seen: MutableSet<Pair<Vector2, Direction>>) {

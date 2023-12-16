@@ -10,4 +10,8 @@ object Day16 : Puzzle<Contraption>(16) {
     override fun solvePart1(input: Contraption): Int {
         return input.countEnergised()
     }
+
+    override fun solvePart2(input: Contraption): Int {
+        return input.countMaxEnergised()
+    }
 }
