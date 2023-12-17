@@ -9,6 +9,8 @@ data class Node(
     val y: Int,
     val dx: Int,
     val dy: Int,
+    val minLen: Int,
+    val maxLen: Int,
 ) : Dijkstra.Node<Node> {
     override val isGoal: Boolean
         get() = x == (grid.width - 1) && y == (grid.height - 1)
@@ -19,7 +21,7 @@ data class Node(
             var x0 = x
             var y0 = y
 
-            for (i in 1..3) {
+            for (i in 1..maxLen) {
                 x0 += dx
                 y0 += dy
 
@@ -30,8 +32,10 @@ data class Node(
 
                 cost += tile.digitToInt()
 
-                yield(Dijkstra.Neighbour(Node(grid, x0, y0, dy, -dx), cost))
-                yield(Dijkstra.Neighbour(Node(grid, x0, y0, -dy, dx), cost))
+                if (i >= minLen) {
+                    yield(Dijkstra.Neighbour(Node(grid, x0, y0, dy, -dx, minLen, maxLen), cost))
+                    yield(Dijkstra.Neighbour(Node(grid, x0, y0, -dy, dx, minLen, maxLen), cost))
+                }
             }
         }
 

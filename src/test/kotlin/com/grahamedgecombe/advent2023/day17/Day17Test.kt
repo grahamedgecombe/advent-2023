@@ -10,6 +10,13 @@ class Day17Test {
         assertEquals(847, Day17.solvePart1(PROD_INPUT))
     }
 
+    @Test
+    fun testPart2() {
+        assertEquals(94, Day17.solvePart2(TEST_INPUT_1))
+        assertEquals(71, Day17.solvePart2(TEST_INPUT_2))
+        assertEquals(997, Day17.solvePart2(PROD_INPUT))
+    }
+
     private companion object {
         private val TEST_INPUT_1 = Day17.parse("""
             2413432311323
@@ -25,6 +32,13 @@ class Day17Test {
             1224686865563
             2546548887735
             4322674655533
+        """.trimIndent())
+        private val TEST_INPUT_2 = Day17.parse("""
+            111111111111
+            999999999991
+            999999999991
+            999999999991
+            999999999991
         """.trimIndent())
         private val PROD_INPUT = Day17.parse()
     }
