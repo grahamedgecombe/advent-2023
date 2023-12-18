@@ -11,10 +11,10 @@ enum class Direction(val vector: Vector2) {
     companion object {
         fun parse(c: Char): Direction {
             return when (c) {
-                'U' -> UP
-                'D' -> DOWN
-                'L' -> LEFT
-                'R' -> RIGHT
+                'U', '3' -> UP
+                'D', '1' -> DOWN
+                'L', '2' -> LEFT
+                'R', '0' -> RIGHT
                 else -> throw IllegalArgumentException()
             }
         }
