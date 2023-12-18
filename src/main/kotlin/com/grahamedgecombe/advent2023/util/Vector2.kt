@@ -21,4 +21,8 @@ data class Vector2(val x: Int, val y: Int) {
     override fun toString(): String {
         return "($x, $y)"
     }
+
+    companion object {
+        val ZERO = Vector2(0, 0)
+    }
 }
