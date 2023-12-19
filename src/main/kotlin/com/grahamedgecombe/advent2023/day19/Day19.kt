@@ -10,4 +10,8 @@ object Day19 : Puzzle<System>(19) {
     override fun solvePart1(input: System): Int {
         return input.sumAcceptedRatings()
     }
+
+    override fun solvePart2(input: System): Long {
+        return input.countCombinations()
+    }
 }
