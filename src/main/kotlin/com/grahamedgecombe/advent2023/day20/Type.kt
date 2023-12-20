@@ -5,6 +5,14 @@ enum class Type {
     FLIP_FLOP,
     CONJUNCTION;
 
+    fun toPrefix(): String {
+        return when (this) {
+            BROADCASTER -> ""
+            FLIP_FLOP -> "%"
+            CONJUNCTION -> "&"
+        }
+    }
+
     companion object {
         fun parse(c: Char): Type {
             return when (c) {
