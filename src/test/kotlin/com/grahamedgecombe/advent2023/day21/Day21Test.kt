@@ -10,6 +10,19 @@ class Day21Test {
         assertEquals(3814, Day21.solvePart1(PROD_INPUT))
     }
 
+    @Test
+    fun testPart2() {
+        assertEquals(16, Day21.solvePart2(TEST_INPUT_1, 6))
+        assertEquals(50, Day21.solvePart2(TEST_INPUT_1, 10))
+        assertEquals(1594, Day21.solvePart2(TEST_INPUT_1, 50))
+        assertEquals(6536, Day21.solvePart2(TEST_INPUT_1, 100))
+        assertEquals(167004, Day21.solvePart2(TEST_INPUT_1, 500))
+        // these are quite slow but pass if uncommented:
+        // assertEquals(668697, Day21.solvePart2(TEST_INPUT_1, 1000))
+        // assertEquals(16733044, Day21.solvePart2(TEST_INPUT_1, 5000))
+        assertEquals(632257949158206, Day21.solvePart2(PROD_INPUT))
+    }
+
     private companion object {
         private val TEST_INPUT_1 = Day21.parse("""
             ...........
