@@ -19,7 +19,7 @@ object Day22 : Puzzle<List<Brick>>(22) {
             val newBricks = ArrayList(bricks)
             newBricks.removeAt(i)
 
-            if (!fall(newBricks)) {
+            if (fall(newBricks).isEmpty()) {
                 safe++
             }
         }
@@ -27,8 +27,25 @@ object Day22 : Puzzle<List<Brick>>(22) {
         return safe
     }
 
-    private fun fall(bricks: MutableList<Brick>): Boolean {
-        var changed = false
+    override fun solvePart2(input: List<Brick>): Int {
+        val bricks = input.toMutableList()
+        bricks.sortBy(Brick::zMin)
+        fall(bricks)
+
+        var sum = 0
+
+        for (i in bricks.indices) {
+            val newBricks = ArrayList(bricks)
+            newBricks.removeAt(i)
+
+            sum += fall(newBricks).size
+        }
+
+        return sum
+    }
+
+    private fun fall(bricks: MutableList<Brick>): Set<Int> {
+        val falling = mutableSetOf<Int>()
 
         for (i in bricks.indices) {
             while (true) {
@@ -37,10 +54,10 @@ object Day22 : Puzzle<List<Brick>>(22) {
                     break
                 }
                 bricks[i] = next
-                changed = true
+                falling += i
             }
         }
 
-        return changed
+        return falling
     }
 }
