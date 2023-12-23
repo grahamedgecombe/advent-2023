@@ -18,6 +18,12 @@ data class Brick(val start: Vector3, val end: Vector3) {
             zMax >= other.zMin && zMin <= other.zMax
     }
 
+    fun supports(other: Brick): Boolean {
+        return zMax + 1 == other.zMin &&
+            xMax >= other.xMin && xMin <= other.xMax &&
+            yMax >= other.yMin && yMin <= other.yMax
+    }
+
     operator fun plus(v: Vector3): Brick {
         return Brick(start + v, end + v)
     }
