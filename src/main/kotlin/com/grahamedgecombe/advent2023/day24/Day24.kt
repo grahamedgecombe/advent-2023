@@ -1,6 +1,12 @@
 package com.grahamedgecombe.advent2023.day24
 
 import com.grahamedgecombe.advent2023.Puzzle
+import com.grahamedgecombe.advent2023.UnsolvableException
+import io.ksmt.KContext
+import io.ksmt.solver.KSolverStatus
+import io.ksmt.solver.z3.KZ3Solver
+import io.ksmt.utils.getValue
+import kotlin.time.Duration
 
 object Day24 : Puzzle<List<Hailstone>>(24) {
     override fun parse(input: Sequence<String>): List<Hailstone> {
@@ -50,5 +56,35 @@ object Day24 : Puzzle<List<Hailstone>>(24) {
         }
 
         return count
+    }
+
+    override fun solvePart2(input: List<Hailstone>): Long {
+        with(KContext()) {
+            KZ3Solver(this).use { solver ->
+                val px by intSort
+                val py by intSort
+                val pz by intSort
+
+                val vx by intSort
+                val vy by intSort
+                val vz by intSort
+
+                for ((i, hailstone) in input.withIndex()) {
+                    val t = mkConst("t$i", intSort)
+                    solver.assert(t ge 0.expr)
+                    solver.assert((px + vx * t) eq (hailstone.position.x.expr + hailstone.velocity.x.expr * t))
+                    solver.assert((py + vy * t) eq (hailstone.position.y.expr + hailstone.velocity.y.expr * t))
+                    solver.assert((pz + vz * t) eq (hailstone.position.z.expr + hailstone.velocity.z.expr * t))
+                }
+
+                val sat = solver.check(Duration.INFINITE)
+                if (sat != KSolverStatus.SAT) {
+                    throw UnsolvableException()
+                }
+
+                val model = solver.model()
+                return model.eval(px + py + pz).toString().toLong()
+            }
+        }
     }
 }

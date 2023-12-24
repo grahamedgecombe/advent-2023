@@ -8,6 +8,8 @@ repositories {
 }
 
 dependencies {
+    implementation('io.ksmt:ksmt-core:0.5.15')
+    implementation('io.ksmt:ksmt-z3:0.5.15')
     testImplementation('org.jetbrains.kotlin:kotlin-test-junit5:1.9.21')
 }
 
